@@ -1,13 +1,9 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
-```{r loading_and_processing}
+
+```r
 unzip("activity.zip", files="activity.csv")
 dta <- read.csv("activity.csv")
 dta_2 <- dta[!is.na(dta$steps),] 
@@ -19,17 +15,33 @@ for (i in dta_2$date) {
 
 
 ## What is mean total number of steps taken per day?
-```{r mean_and_total}
+
+```r
 hist(dta_hist[,2], breaks=10)
+```
 
+![](PA1_template_files/figure-html/mean_and_total-1.png) 
+
+```r
 mean(dta_hist[!is.na(dta_hist[,2]),2])
+```
 
+```
+## [1] 10766.19
+```
+
+```r
 median(dta_hist[!is.na(dta_hist[,2]),2])
+```
+
+```
+## [1] 10765
 ```
 
 
 ## What is the average daily activity pattern?
-```{r avg_daily}
+
+```r
 aux <- data.frame(interval=simplify2array(labels(table(dta_2$interval))))
 
 for (i in aux[,1]) {
@@ -37,34 +49,22 @@ for (i in aux[,1]) {
 }
 
 plot(aux[,2], type="l")
+```
 
+![](PA1_template_files/figure-html/avg_daily-1.png) 
+
+```r
 aux[match(max(aux[,2]),aux[,2]),1]
+```
+
+```
+## [1] 835
+## 288 Levels: 0 10 100 1000 1005 1010 1015 1020 1025 1030 1035 1040 ... 955
 ```
 
 
 ## Imputing missing values
-```{r substitute NA for avg of interval}
-is_na <- sum(is.na(dta[,1]))
-attach(dta_2)
-avgRows <- ave(steps, interval)
-intRows <- dta_3[,3]
-detach()
-dta_clean <- dta
-for (i in 1:length(dta_clean[,1])) {
-      if (is.na(dta_clean[i,1])) {
-            dta[i,1] <- avgRows[match(dta_clean[i,3], intRows)]
-      }
-}
 
-dta_hist_clean <- data.frame(date=levels(dta_clean$date))
-for (i in dta_clean$date) {
-      dta_hist_clean[match(i,dta_hist$date),2] <- sum(dta_clean[dta_clean$date==i,"steps"])
-}
-hist(dta_hist_clean[,2], breaks=10)
 
-mean(dta_hist_clean[!is.na(dta_hist_clean[,2]),2])
 
-median(dta_hist_clean[!is.na(dta_hist_clean[,2]),2])
-
-```
 ## Are there differences in activity patterns between weekdays and weekends?
