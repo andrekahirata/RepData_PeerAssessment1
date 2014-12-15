@@ -44,10 +44,10 @@ aux[match(max(aux[,2]),aux[,2]),1]
 
 ## Imputing missing values
 ```{r substitute NA for avg of interval}
-is_na <- sum(is.na(dta[,1]))
+dta_na <- sum(is.na(dta[,1]))
 attach(dta_2)
 avgRows <- ave(steps, interval)
-intRows <- dta_3[,3]
+intRows <- dta_2[,3]
 detach()
 dta_clean <- dta
 for (i in 1:length(dta_clean[,1])) {
